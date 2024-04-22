@@ -73,7 +73,7 @@ def add_jobs():
 def main_menu():
     with open('README.md', mode='r', encoding='utf-8') as readme:
         text = readme.readlines()
-    return render_template("main.html", text=text)
+    return render_template("main.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])

@@ -1,14 +1,5 @@
 {% extends "base.html" %}
 
 {% block content %}
-<meta charset="UTF-8">
-    <h2 align="left">Основная страница</h2>
-<h3>Readme:</h3>
-{% for line in text %}
-<div>
-    <p>{{ line }}</p>
-</div>
-<br>
-{% endfor %}
-
+    <h1 class="text-light">Привет, {{ username }}!</h1>
 {% endblock %}
