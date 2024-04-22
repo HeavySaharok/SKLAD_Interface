@@ -76,6 +76,15 @@ def main_menu():
     return render_template("main.html")
 
 
+@app.route("/i")
+def index():
+    session = db_session.create_session()
+    jobs = session.query(Jobs).all()
+    users = session.query(User).all()
+    names = {name.id: (name.surname, name.name) for name in users}
+    return render_template("index.html", jobs=jobs, names=names)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()

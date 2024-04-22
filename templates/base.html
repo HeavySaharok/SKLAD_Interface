@@ -10,11 +10,27 @@
     <title>{{title}}</title>
 </head>
 <body style="background-color:#292D2F;">
-<header>
-    <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Наше приложение</a>
-    </nav>
-</header>
+    <header>
+        <nav class="navbar navbar-dark bg-dark text-light" data-bs-theme="dark">
+           <a class="" href="/"><h1>SKLAD Интерфейс</h1></a>
+            <p>
+                <a class="btn btn-secondary" href="">Список складов</a>
+                <a class="btn btn-secondary" href="">Список товаров</a>
+            </p>
+            {% if current_user.is_authenticated %}
+                <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+            {% else %}
+                <p>
+                    <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                    <a class="btn btn-success" href="/login">Войти</a>
+                </p>
+            {% endif %}
+        </nav>
+        <div class="navbar navbar-dark bg-dark text-light">
+            <h5>by Войтик Даниил & Фёдор Давыдюк</h5>
+            <h5>Project for Yandex Lyceum</h5>
+        </div>
+    </header>
 <!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}
