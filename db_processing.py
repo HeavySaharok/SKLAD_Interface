@@ -1,7 +1,7 @@
 import sqlite3
 
 
-con = sqlite3.connect("main_storage.db")
+con = sqlite3.connect("db/main_storage.db")
 cur = con.cursor()
 result = cur.execute("""SELECT * FROM products
             WHERE type = 1""").fetchall()

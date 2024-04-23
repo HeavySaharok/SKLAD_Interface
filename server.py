@@ -28,7 +28,7 @@ def logout():
 
 
 def main():
-    db_session.global_init("db/mars.db")
+    db_session.global_init("db/users.db")
 
     # для списка объектов
     api.add_resource(users_resources.UsersListResource, '/api/v2/users')
