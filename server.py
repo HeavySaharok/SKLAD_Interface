@@ -6,6 +6,8 @@ from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
+from data.news import News
+from forms.news import NewsForm
 
 app = Flask(__name__)
 api = Api(app) # создадим объект RESTful-API
@@ -115,6 +117,24 @@ def login():
             return redirect("/")
         return render_template('login.html', message="Неправильный логин или пароль", form=form)
     return render_template('login.html', title='Авторизация', form=form)
+
+
+@app.route('/news', methods=['GET', 'POST'])
+@login_required
+def add_news():
+    form = NewsForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = News()
+        news.title = form.title.data
+        news.content = form.content.data
+        news.is_private = form.is_private.data
+        current_user.news.append(news)
+        db_sess.merge(current_user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('news.html', title='Добавление новости', form=form)
+
 
 
 if __name__ == '__main__':
