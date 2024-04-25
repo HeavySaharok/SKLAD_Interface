@@ -100,10 +100,7 @@ def reqister():
             name=form.name.data,
             email=form.email.data,
             surname=form.surname.data,
-            age=form.age.data,
-            position=form.position.data,
             speciality=form.speciality.data,
-            address=form.address.data,
             hashed_password=form.set_password(form.password.data)
         )
         user.set_password(form.password.data)
@@ -122,8 +119,8 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)  # тыц, там session
             return redirect("/")
-        return render_template('login.html', message="Неправильный логин или пароль", form=form)
-    return render_template('login.html', title='Авторизация', form=form)
+        return render_template('login_2.html', message="Неправильный логин или пароль", form=form)
+    return render_template('login_2.html', title='Авторизация', form=form)
 
 
 if __name__ == '__main__':

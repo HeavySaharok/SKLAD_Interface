@@ -13,13 +13,20 @@
     <header>
         <nav class="navbar navbar-dark bg-dark text-light" data-bs-theme="dark">
            <a class="" href="/"><h1>SKLAD Интерфейс</h1></a>
-            <p>
-                <a class="btn btn-secondary" href="">Список складов</a>
-                <a class="btn btn-secondary" href="">Список товаров</a>
-            </p>
             {% if current_user.is_authenticated %}
+                <p>
+                    <a class="btn btn-success" href="">Управление складами</a>
+                    <a class="btn btn-secondary" href="">Список складов</a>
+                    <a class="btn btn-secondary" href="">Список товаров</a>
+                    <a class="btn btn-primary " href="/">Создать склад</a>
+                    <a class="btn btn-primary" href="/">Создать товар</a>
+                </p>
                 <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
             {% else %}
+                <p>
+                    <a class="btn btn-secondary" href="">Список складов</a>
+                    <a class="btn btn-secondary" href="">Список товаров</a>
+                </p>
                 <p>
                     <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
                     <a class="btn btn-success" href="/login">Войти</a>
