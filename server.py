@@ -1,9 +1,12 @@
 from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import reqparse, abort, Api, Resource
+
+from data.item_model import ItemModel
 from data.jobs import Jobs
 from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
+from forms.item import ItemForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
 
@@ -62,7 +65,7 @@ def add_jobs():
     return render_template('jobs.html', title='Добавление новости', form=form)
 
 
-@app.route('/jobs', methods=['GET', 'POST'])
+@app.route('/new_warehouse', methods=['GET', 'POST'])
 @login_required
 def add_skald():
     """Создаёт склад в бд и отдельную таблицу склада"""
@@ -80,6 +83,27 @@ def add_skald():
         db_sess.commit()
         return redirect('/')
     return render_template('jobs.html', title='Добавление новости', form=form)
+
+
+@app.route('/new_item', methods=['GET', 'POST'])
+@login_required
+def add_item():
+    """
+    Добавляет строку товара в таблицу продуктов
+    :return:
+    """
+    form = ItemForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        item = ItemModel()
+        item.name = form.item_name.data
+        item.category = form.category.data
+        item.price = form.price.data
+        item.weight = form.weight.data
+        db_sess.merge(current_user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('new_item.html', title='Создание предмета', form=form)
 
 
 @app.route("/")

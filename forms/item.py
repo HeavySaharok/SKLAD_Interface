@@ -6,7 +6,6 @@ from wtforms.validators import DataRequired
 class ItemForm(FlaskForm):
     item_name = StringField('Название предмета', validators=[DataRequired()])
     category = TextAreaField("Категория")
-    amount = IntegerField("Колличество")
-    collaborators = TextAreaField("Коллабораторы")
-    is_finished = BooleanField("Работа завершена?")
-    submit = SubmitField('Применить')
+    price = IntegerField("Цена")
+    weight = IntegerField("Вес")
+    submit = SubmitField('Создать предмет')
