@@ -10,18 +10,13 @@ def create_table(name):
     cur = con.cursor()
 
     # Выполнение запроса и получение всех результатов
-    result = cur.execute(f"""CREATE TABLE "{name}" (
-        "id"	TEXT NOT NULL,
-        "name"	TEXT NOT NULL,
-        "category"	INTEGER NOT NULL,
-        "amount"	INTEGER NOT NULL,
-        "price"	INTEGER NOT NULL,
-        "weight"	INTEGER NOT NULL,
-        PRIMARY KEY("id")
-    )""")
+    result = cur.execute(f"""CREATE TABLE {name} (
+    id TEXT NOT NULL UNIQUE,
+    amount INTEGER NOT NULL,
+    PRIMARY KEY (id))""")
 
     con.commit()
     con.close()
 
 
-create_table('WARE_B')
+create_table('WARE_C')
