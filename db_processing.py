@@ -10,7 +10,7 @@ def create_table(name):
     cur = con.cursor()
 
     # Выполнение запроса и получение всех результатов
-    result = cur.execute(f"""CREATE TABLE {name} (
+    cur.execute(f"""CREATE TABLE {name} (
     id TEXT NOT NULL UNIQUE,
     amount INTEGER NOT NULL,
     PRIMARY KEY (id))""")
