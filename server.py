@@ -7,6 +7,7 @@ from data.jobs import Jobs
 from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
 from forms.item import ItemForm
+from forms.warehouse import WarehouseForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
 
@@ -69,7 +70,7 @@ def add_jobs():
 @login_required
 def add_skald():
     """Создаёт склад в бд и отдельную таблицу склада"""
-    form = JobsForm()
+    form = WarehouseForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         jobs = Jobs()
@@ -82,7 +83,7 @@ def add_skald():
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')
-    return render_template('jobs.html', title='Добавление новости', form=form)
+    return render_template('create_sklad.html', title='Добавление склада', form=form)
 
 
 @app.route('/new_item', methods=['GET', 'POST'])
