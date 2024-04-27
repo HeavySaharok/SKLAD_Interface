@@ -1,15 +1,13 @@
 from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import reqparse, abort, Api, Resource
-
-from data.item_model import ItemModel
 from data.jobs import Jobs
 from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
-from forms.item import ItemForm
-from forms.warehouse import WarehouseForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
+from data.news import News
+from forms.news import NewsForm
 
 app = Flask(__name__)
 api = Api(app) # создадим объект RESTful-API
@@ -24,8 +22,15 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
 def main():
-    db_session.global_init("db/site.db")
+    db_session.global_init("db/users.db")
 
     # для списка объектов
     api.add_resource(users_resources.UsersListResource, '/api/v2/users')
@@ -66,77 +71,15 @@ def add_jobs():
     return render_template('jobs.html', title='Добавление новости', form=form)
 
 
-@app.route('/new_warehouse', methods=['GET', 'POST'])
-@login_required
-def add_skald():
-    """Создаёт склад в бд и отдельную таблицу склада"""
-    form = WarehouseForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        jobs = Jobs()
-        jobs.job = form.job.data
-        jobs.team_leader = form.team_leader.data
-        jobs.work_size = form.work_size.data
-        jobs.collaborators = form.collaborators.data
-        jobs.is_finished = form.is_finished.data
-        current_user.jobs.append(jobs)
-        db_sess.merge(current_user)
-        db_sess.commit()
-        return redirect('/')
-    return render_template('create_sklad.html', title='Добавление склада', form=form)
-
-
-@app.route('/new_item', methods=['GET', 'POST'])
-@login_required
-def add_item():
-    """
-    Добавляет строку товара в таблицу продуктов
-    :return:
-    """
-    form = ItemForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        item = ItemModel()
-        item.name = form.item_name.data
-        item.category = form.category.data
-        item.price = form.price.data
-        item.weight = form.weight.data
-        db_sess.merge(current_user)
-        db_sess.commit()
-        return redirect('/')
-    return render_template('new_item.html', title='Создание предмета', form=form)
-
-
 @app.route("/")
 def main_menu():
-    """
-    Основная странца, на ней новости, но при желании можно впихнуть, что угодно
-    :return:
-    """
     with open('README.md', mode='r', encoding='utf-8') as readme:
         text = readme.readlines()
-    return render_template("main.html")
-
-
-@app.route("/i")
-def index():
-    """
-    Тестовая страница для БД
-    :return:
-    """
-    session = db_session.create_session()
-    jobs = session.query(Jobs).all()
-    users = session.query(User).all()
-    names = {name.id: (name.surname, name.name) for name in users}
-    return render_template("index.html", jobs=jobs, names=names)
+    return render_template("main.html", text=text)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
-    """
-    Регистрация
-    :return:
-    """
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -150,7 +93,10 @@ def reqister():
             name=form.name.data,
             email=form.email.data,
             surname=form.surname.data,
+            age=form.age.data,
+            position=form.position.data,
             speciality=form.speciality.data,
+            address=form.address.data,
             hashed_password=form.set_password(form.password.data)
         )
         user.set_password(form.password.data)
@@ -162,10 +108,6 @@ def reqister():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """
-    Вход вв аккаунт
-    :return:
-    """
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -173,19 +115,27 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)  # тыц, там session
             return redirect("/")
-        return render_template('login_2.html', message="Неправильный логин или пароль", form=form)
-    return render_template('login_2.html', title='Авторизация', form=form)
+        return render_template('login.html', message="Неправильный логин или пароль", form=form)
+    return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route('/logout')
+@app.route('/news', methods=['GET', 'POST'])
 @login_required
-def logout():
-    '''
-    Выход из аккаунта
-    :return:
-    '''
-    logout_user()
-    return redirect("/")
+def add_news():
+    form = NewsForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = News()
+        news.title = form.title.data
+        news.content = form.content.data
+        news.is_private = form.is_private.data
+        current_user.news.append(news)
+        db_sess.merge(current_user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('news.html', title='Добавление новости', form=form)
+
+
 
 if __name__ == '__main__':
     main()
