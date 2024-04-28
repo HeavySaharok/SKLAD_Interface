@@ -95,16 +95,16 @@ def add_item():
     return render_template('new_item.html', title='Создание предмета', form=form)
 
 
-@app.route('/edit_item/<int:idd>', methods=['GET', 'POST'])
+@app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_item(idd):
+def edit_item(id):
     """
     Редактирование выбранного товара в общем списке
     """
     form = ItemForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        item = db_sess.query(ItemModel).filter(ItemModel.id == idd).first()
+        item = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
         if item:
             form.item_name.data = item.name
             form.category.data = item.category
@@ -115,7 +115,7 @@ def edit_item(idd):
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        item = db_sess.query(ItemModel).filter(ItemModel.id == idd).first()
+        item = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
         if item:
             item.name = form.item_name.data
             item.category = form.category.data
@@ -132,14 +132,14 @@ def edit_item(idd):
                            form=form)
 
 
-@app.route('/items_delete/<int:idd>', methods=['GET', 'POST'])
+@app.route('/items_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def delete_item(idd):
+def delete_item(id):
     """
     Удаление товара из общего списка продуктов
     """
     db_sess = db_session.create_session()
-    items = db_sess.query(ItemModel).filter(ItemModel.id == idd).first()
+    items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
     if items:
         db_sess.delete(items)
         db_sess.commit()
@@ -148,16 +148,16 @@ def delete_item(idd):
     return redirect('/items_list')
 
 
-@app.route('/wares_list/<int:idd>', methods=['GET', 'POST'])
+@app.route('/wares_list/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_ware(idd):
+def edit_ware(id):
     """
     Изменение выбранного склада в общем списке
     """
     form = WarehouseForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        items = db_sess.query(WareModel).filter(WareModel.id == idd).first()
+        items = db_sess.query(WareModel).filter(WareModel.id == id).first()
         if items:
             form.wh_name.data = items.name
             form.coords.data = items.coords
@@ -184,14 +184,14 @@ def edit_ware(idd):
                            form=form)
 
 
-@app.route('/wares_delete/<int:idd>', methods=['GET', 'POST'])
+@app.route('/wares_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def delete_ware(idd):
+def delete_ware(id):
     """
     Удаление выбранного склада в общем списке
     """
     db_sess = db_session.create_session()
-    ware = db_sess.query(WareModel).filter(WareModel.id == idd).first()
+    ware = db_sess.query(WareModel).filter(WareModel.id == id).first()
     if ware:
         delete_table(ware.name)
         db_sess.delete(ware)
