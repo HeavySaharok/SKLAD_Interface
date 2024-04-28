@@ -258,8 +258,8 @@ def sklad_inventory(name):
     """
     Отображение инвентаря склада
     """
-    session = db_session.create_session()
     items = table_data(name)
+    print(items)
     return render_template("sklad_inventory.html", items=items)
 
 

@@ -13,8 +13,8 @@
         </tr>
         {% for item in items %}
         <tr class="my_row">
-            <td class="ordinary">{{ item.id }}</td>
-            <td class="ordinary">{{ item.amount }}</td>
+            <td class="ordinary">{{ item[0] }}</td>
+            <td class="ordinary">{{ item[1] }}</td>
         </tr>
         {% endfor %}
     </table>
