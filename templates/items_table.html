@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="UTF-8">
+<h2 align="center" class="text-light">Список складируемых предметов</h2>
+{% for item in items %}
+<h3 class="text-light">Продукт # {{ item.id }}</h3>
+<div class="table_container">
+    <table class="my_table">
+        <tr class="my_row">
+            <td class="title" width="200px" bgcolor="#BCBDC2">Название</td>
+            <td class="title" width="200px" bgcolor="#BCBDC2">Категория</td>
+            <td class="title" width="200px" bgcolor="#BCBDC2" align="center">Цена</td>
+            <td class="title" width="200px" bgcolor="#BCBDC2" align="center">Вес</td>
+        </tr>
+        <tr class="my_row">
+            <td class="ordinary" bgcolor="#E1E2E5">{{ item.name}}</td>
+            <td class="ordinary" bgcolor="#E1E2E5">{{ item.category}}</td>
+            <td class="ordinary" bgcolor="#E1E2E5" align="center">{{ item.price }} руб</td>
+            <td class="ordinary" bgcolor="#E1E2E5" align="center">{{ item.weight }} кг</td>
+        </tr>
+    </table>
+</div>
+<br>
+{% endfor %}
+
+{% endblock %}
