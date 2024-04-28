@@ -24,7 +24,8 @@ def get_jobs():
 @blueprint.route('/api/jobs/<int:jobs_id>', methods=['GET'])
 def get_one_jobs(jobs_id):
     db_sess = db_session.create_session()
-    # Согласно REST, далее нужно реализовать получение информации об одной новости. Фактически, мы уже получили из списка
+    # Согласно REST, далее нужно реализовать получение информации об одной новости.
+    # Фактически, мы уже получили из списка
     # всю информацию о каждой новости. При проектировании приложений по архитектуре REST обычно поступают таким образом:
     # когда возвращается список объектов, он содержит только краткую информацию (например, только id и заголовок)...
     jobs = db_sess.query(Jobs).get(jobs_id)
@@ -58,7 +59,7 @@ def create_jobs():
 
 
 @blueprint.route('/api/jobs/<int:jobs_id>', methods=['DELETE'])
-def delete_Jobs(jobs_id):
+def delete_jobs(jobs_id):
     db_sess = db_session.create_session()
     jobs = db_sess.query(Jobs).get(jobs_id)
     if not jobs:

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from flask_restful import reqparse, abort, Api, Resource
+from flask_restful import abort, Api
 
 from data.item_model import ItemModel
 from data.ware_model import WareModel
@@ -12,7 +12,7 @@ from data import db_session, jobs_api, users_resources
 from db.db_processing import *
 
 app = Flask(__name__)
-api = Api(app) # создадим объект RESTful-API
+api = Api(app)  # создадим объект RESTful-API
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -40,12 +40,12 @@ def main():
     app.run(debug=True)
 
 
-@app.errorhandler(400) # ошибка 400
+@app.errorhandler(400)  # ошибка 400
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
-@app.errorhandler(404) # ошибка 404
+@app.errorhandler(404)  # ошибка 404
 def not_found(_):
     return render_template('not_found.html')
 
@@ -96,14 +96,14 @@ def add_item():
 
 @app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_item(id):
+def edit_item(idd):
     """
     Редактирование выбранного товара в общем списке
     """
     form = ItemForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        item = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+        item = db_sess.query(ItemModel).filter(ItemModel.id == idd).first()
         if item:
             form.item_name.data = item.name
             form.category.data = item.category
@@ -114,7 +114,7 @@ def edit_item(id):
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        item = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+        item = db_sess.query(ItemModel).filter(ItemModel.id == idd).first()
         if item:
             item.name = form.item_name.data
             item.category = form.category.data
@@ -133,12 +133,12 @@ def edit_item(id):
 
 @app.route('/items_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def delete_item(id):
+def delete_item(idd):
     """
     Удаление товара из общего списка продуктов
     """
     db_sess = db_session.create_session()
-    items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+    items = db_sess.query(ItemModel).filter(ItemModel.id == idd).first()
     if items:
         db_sess.delete(items)
         db_sess.commit()
@@ -149,14 +149,14 @@ def delete_item(id):
 
 @app.route('/wares_list/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_ware(id):
+def edit_ware(idd):
     """
     Изменение выбранного склада в общем списке
     """
     form = WarehouseForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        items = db_sess.query(WareModel).filter(WareModel.id == id).first()
+        items = db_sess.query(WareModel).filter(WareModel.id == idd).first()
         if items:
             form.wh_name.data = items.name
             form.coords.data = items.coords
@@ -185,12 +185,12 @@ def edit_ware(id):
 
 @app.route('/wares_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def delete_ware(id):
+def delete_ware(idd):
     """
     Удаление выбранного склада в общем списке
     """
     db_sess = db_session.create_session()
-    ware = db_sess.query(WareModel).filter(WareModel.id == id).first()
+    ware = db_sess.query(WareModel).filter(WareModel.id == idd).first()
     if ware:
         delete_table(ware.name)
         db_sess.delete(ware)
@@ -199,13 +199,14 @@ def delete_ware(id):
         abort(404)
     return redirect('/wares_list')
 
+
 @app.route("/")
 def main_menu():
     """
     Основная странца, на ней новости, но при желании можно впихнуть, что угодно
     """
-    with open('README.md', mode='r', encoding='utf-8') as readme:
-        text = readme.readlines()
+    # with open('README.md', mode='r', encoding='utf-8') as readme:
+    #     text = readme.readlines()
     return render_template("main.html")
 
 
@@ -286,11 +287,12 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    '''
+    """
     Выход из аккаунта
-    '''
+    """
     logout_user()
     return redirect("/")
+
 
 if __name__ == '__main__':
     main()
