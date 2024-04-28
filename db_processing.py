@@ -13,3 +13,14 @@ def create_table(name):
         PRIMARY KEY (id))""").fetchall()
     con.commit()
     con.close()
+
+
+def delete_table(name):
+    """
+    Удаляет таблицу склада в БД
+    """
+    con = sqlite3.connect("db/main_database.db")
+    cur = con.cursor()
+    cur.execute(f"""DROP TABLE {name}""")
+    con.commit()
+    con.close()

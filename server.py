@@ -11,7 +11,7 @@ from forms.item import ItemForm
 from forms.ware import WarehouseForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
-from db_processing import create_table
+from db_processing import *
 
 app = Flask(__name__)
 api = Api(app) # создадим объект RESTful-API
@@ -199,6 +199,7 @@ def delete_ware(id):
     db_sess = db_session.create_session()
     ware = db_sess.query(WareModel).filter(WareModel.id == id).first()
     if ware:
+        delete_table(ware.name)
         db_sess.delete(ware)
         db_sess.commit()
     else:
