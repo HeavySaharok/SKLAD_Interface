@@ -4,6 +4,9 @@ from wtforms.validators import DataRequired
 
 
 class WarehouseForm(FlaskForm):
+    """
+    Форма для создания и редактирования склада
+    """
     wh_name = StringField('Назввание склада', validators=[DataRequired()])
     coords = TextAreaField("Координаты")
     limit = IntegerField("Лимит вместимости")

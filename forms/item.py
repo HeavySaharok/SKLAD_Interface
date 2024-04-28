@@ -4,6 +4,9 @@ from wtforms.validators import DataRequired
 
 
 class ItemForm(FlaskForm):
+    """
+    Форма для создания и редактирования товара
+    """
     item_name = StringField('Название предмета', validators=[DataRequired()])
     category = TextAreaField("Категория")
     price = IntegerField("Цена")

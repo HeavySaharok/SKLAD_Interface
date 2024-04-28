@@ -4,15 +4,12 @@ from flask_restful import reqparse, abort, Api, Resource
 
 from data.item_model import ItemModel
 from data.ware_model import WareModel
-from data.inventory_model import InvModel
-from data.jobs import Jobs
-from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
 from forms.item import ItemForm
 from forms.ware import WarehouseForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
-from db_processing import *
+from db.db_processing import *
 
 app = Flask(__name__)
 api = Api(app) # создадим объект RESTful-API
@@ -23,6 +20,9 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Загрузка пользователя
+    """
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
@@ -40,33 +40,14 @@ def main():
     app.run(debug=True)
 
 
-@app.errorhandler(400)
+@app.errorhandler(400) # ошибка 400
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
-@app.errorhandler(404)
+@app.errorhandler(404) # ошибка 404
 def not_found(_):
     return render_template('not_found.html')
-
-
-@app.route('/jobs', methods=['GET', 'POST'])
-@login_required
-def add_jobs():
-    form = JobsForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        jobs = Jobs()
-        jobs.job = form.job.data
-        jobs.team_leader = form.team_leader.data
-        jobs.work_size = form.work_size.data
-        jobs.collaborators = form.collaborators.data
-        jobs.is_finished = form.is_finished.data
-        current_user.jobs.append(jobs)
-        db_sess.merge(current_user)
-        db_sess.commit()
-        return redirect('/')
-    return render_template('jobs.html', title='Добавление новости', form=form)
 
 
 @app.route('/new_warehouse', methods=['GET', 'POST'])
@@ -97,7 +78,6 @@ def add_ware():
 def add_item():
     """
     Добавляет строку товара в таблицу продуктов
-    :return:
     """
     form = ItemForm()
     if form.validate_on_submit():
@@ -117,6 +97,9 @@ def add_item():
 @app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_item(id):
+    """
+    Редактирование выбранного товара в общем списке
+    """
     form = ItemForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
@@ -151,6 +134,9 @@ def edit_item(id):
 @app.route('/items_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_item(id):
+    """
+    Удаление товара из общего списка продуктов
+    """
     db_sess = db_session.create_session()
     items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
     if items:
@@ -164,6 +150,9 @@ def delete_item(id):
 @app.route('/wares_list/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_ware(id):
+    """
+    Изменение выбранного склада в общем списке
+    """
     form = WarehouseForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
@@ -197,6 +186,9 @@ def edit_ware(id):
 @app.route('/wares_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_ware(id):
+    """
+    Удаление выбранного склада в общем списке
+    """
     db_sess = db_session.create_session()
     ware = db_sess.query(WareModel).filter(WareModel.id == id).first()
     if ware:
@@ -211,31 +203,16 @@ def delete_ware(id):
 def main_menu():
     """
     Основная странца, на ней новости, но при желании можно впихнуть, что угодно
-    :return:
     """
     with open('README.md', mode='r', encoding='utf-8') as readme:
         text = readme.readlines()
     return render_template("main.html")
 
 
-@app.route("/i")
-def index():
-    """
-    Тестовая страница для БД
-    :return:
-    """
-    session = db_session.create_session()
-    jobs = session.query(Jobs).all()
-    users = session.query(User).all()
-    names = {name.id: (name.surname, name.name) for name in users}
-    return render_template("index.html", jobs=jobs, names=names)
-
-
 @app.route("/items_list")
 def items_list():
     """
     Отображение табилцы предметов
-    :return:
     """
     session = db_session.create_session()
     items = session.query(ItemModel).all()
@@ -246,7 +223,6 @@ def items_list():
 def sklad_list():
     """
     Отображение табилцы складов
-    :return:
     """
     session = db_session.create_session()
     warehouses = session.query(WareModel).all()
@@ -267,7 +243,6 @@ def sklad_inventory(name):
 def reqister():
     """
     Регистрация
-    :return:
     """
     form = RegisterForm()
     if form.validate_on_submit():
@@ -295,8 +270,7 @@ def reqister():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """
-    Вход вв аккаунт
-    :return:
+    Вход в аккаунт
     """
     form = LoginForm()
     if form.validate_on_submit():
@@ -314,7 +288,6 @@ def login():
 def logout():
     '''
     Выход из аккаунта
-    :return:
     '''
     logout_user()
     return redirect("/")

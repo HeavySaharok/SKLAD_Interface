@@ -6,6 +6,9 @@ from .db_session import SqlAlchemyBase
 
 
 class ItemModel(SqlAlchemyBase, UserMixin, SerializerMixin):
+    """
+    Модель товара
+    """
     __tablename__ = 'products'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,

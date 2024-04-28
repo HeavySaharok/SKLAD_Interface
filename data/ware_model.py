@@ -6,6 +6,9 @@ from .db_session import SqlAlchemyBase
 
 
 class WareModel(SqlAlchemyBase, UserMixin, SerializerMixin):
+    """
+    Модель cклада
+    """
     __tablename__ = 'warehouses'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
