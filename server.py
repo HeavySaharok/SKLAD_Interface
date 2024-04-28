@@ -197,7 +197,7 @@ def edit_ware(id):
 @login_required
 def delete_ware(id):
     db_sess = db_session.create_session()
-    ware = db_sess.query(ItemModel).filter(WareModel.id == id).first()
+    ware = db_sess.query(WareModel).filter(WareModel.id == id).first()
     if ware:
         db_sess.delete(ware)
         db_sess.commit()
