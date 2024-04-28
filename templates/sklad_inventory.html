@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p><br></p>
+<div class="border rounded">
+<meta charset="UTF-8">
+<h2 align="center" class="text-light">Список товаров на складе</h2>
+<div class="table_container">
+    <table class="table table-striped text-light">
+        <tr class="my_row">
+            <td class="title" width="50px">ID</td>
+            <td class="title" width="200px">Количество</td>
+        </tr>
+        {% for item in items %}
+        <tr class="my_row">
+            <td class="ordinary">{{ item.id }}</td>
+            <td class="ordinary">{{ item.amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</div>
+<br>
+
+{% endblock %}

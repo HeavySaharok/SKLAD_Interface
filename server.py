@@ -4,6 +4,7 @@ from flask_restful import reqparse, abort, Api, Resource
 
 from data.item_model import ItemModel
 from data.ware_model import WareModel
+from data.inventory_model import InvModel
 from data.jobs import Jobs
 from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
@@ -250,6 +251,16 @@ def sklad_list():
     session = db_session.create_session()
     warehouses = session.query(WareModel).all()
     return render_template("sklad_table.html", warehouses=warehouses)
+
+
+@app.route("/wares_inventory/<name>", methods=['GET', 'POST'])
+def sklad_inventory(name):
+    """
+    Отображение инвентаря склада
+    """
+    session = db_session.create_session()
+    items = table_data(name)
+    return render_template("sklad_inventory.html", items=items)
 
 
 @app.route('/register', methods=['GET', 'POST'])

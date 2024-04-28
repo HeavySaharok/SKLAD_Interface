@@ -24,8 +24,11 @@
             <td class="ordinary" align="center">{{ warehouse.limit }}</td>
             <td class="ordinary" align="center">{{ warehouse.fullness }}</td>
             <td class="ordinary">{{ warehouse.description }}</td>
-            <td class="ordinary"><a href="/wares_list/{{ warehouse.id }}" class="btn btn-success">
-                Изменить
+            <td class="ordinary"><a href="/wares_inventory/{{ warehouse.name }}" class="btn btn-secondary">
+                 Товары  
+            </a>
+            <a href="/wares_list/{{ warehouse.id }}" class="btn btn-success">
+                 Изменить  
             </a>
             <a href="/wares_delete/{{ warehouse.id }}" class="btn btn-danger">
                  Удалить  
