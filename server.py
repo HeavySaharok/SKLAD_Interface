@@ -25,7 +25,7 @@ def load_user(user_id):
 
 
 def main():
-    db_session.global_init("db/mars.db")
+    db_session.global_init("db/main_database.db")
 
     # для списка объектов
     api.add_resource(users_resources.UsersListResource, '/api/v2/users')
@@ -101,8 +101,9 @@ def add_item():
         item.category = form.category.data
         item.price = form.price.data
         item.weight = form.weight.data
-        db_sess.merge(current_user)
+        db_sess.merge(item)
         db_sess.commit()
+        print(item.id, item.name, item.category, item.price, item.weight)
         return redirect('/')
     return render_template('new_item.html', title='Создание предмета', form=form)
 
