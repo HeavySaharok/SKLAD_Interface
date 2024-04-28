@@ -95,7 +95,7 @@ def add_item():
     return render_template('new_item.html', title='Создание предмета', form=form)
 
 
-@app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit_item/<int:idd>', methods=['GET', 'POST'])
 @login_required
 def edit_item(idd):
     """
@@ -132,7 +132,7 @@ def edit_item(idd):
                            form=form)
 
 
-@app.route('/items_delete/<int:id>', methods=['GET', 'POST'])
+@app.route('/items_delete/<int:idd>', methods=['GET', 'POST'])
 @login_required
 def delete_item(idd):
     """
@@ -148,7 +148,7 @@ def delete_item(idd):
     return redirect('/items_list')
 
 
-@app.route('/wares_list/<int:id>', methods=['GET', 'POST'])
+@app.route('/wares_list/<int:idd>', methods=['GET', 'POST'])
 @login_required
 def edit_ware(idd):
     """
@@ -184,7 +184,7 @@ def edit_ware(idd):
                            form=form)
 
 
-@app.route('/wares_delete/<int:id>', methods=['GET', 'POST'])
+@app.route('/wares_delete/<int:idd>', methods=['GET', 'POST'])
 @login_required
 def delete_ware(idd):
     """
