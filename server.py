@@ -46,7 +46,7 @@ def bad_request(_):
 
 @app.errorhandler(404)
 def not_found(_):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+    return render_template('not_found.html')
 
 
 @app.route('/jobs', methods=['GET', 'POST'])
@@ -87,7 +87,7 @@ def add_ware():
         ware.desc = form.description.data
         db_sess.merge(ware)
         db_sess.commit()
-        return redirect('/')
+        return redirect('/wares_list')
     return render_template('warehouses.html', title='Создание склада', form=form)
 
 
@@ -109,14 +109,14 @@ def add_item():
         item.description = form.desc.data
         db_sess.merge(item)
         db_sess.commit()
-        return redirect('/')
+        return redirect('/items_list')
     return render_template('new_item.html', title='Создание предмета', form=form)
 
 
-@app.route('/items_list/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_item(id):
-    form = ItemForm
+    form = ItemForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
         items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
@@ -125,7 +125,7 @@ def edit_item(id):
             form.category.data = items.category
             form.price.data = items.price
             form.weight.data = items.weight
-            form.desc.data = items.desc
+            form.desc.data = items.description
         else:
             abort(404)
         if form.validate_on_submit():
@@ -136,12 +136,12 @@ def edit_item(id):
                 items.category = form.category.data
                 items.price = form.price.data
                 items.weight = form.weight.data
-                items.desc = form.desc.data
+                items.description = form.desc.data
                 db_sess.commit()
                 return redirect('/')
             else:
                 abort(404)
-        return render_template('item_edit.html',
+        return render_template('new_item.html',
                                title='Редактирование продукта',
                                form=form)
 
@@ -156,13 +156,13 @@ def delete_item(id):
         db_sess.commit()
     else:
         abort(404)
-    return redirect('/')
+    return redirect('/items_list')
 
 
 @app.route('/wares_list/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_ware(id):
-    form = WarehouseForm
+    form = WarehouseForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
         items = db_sess.query(WareModel).filter(WareModel.id == id).first()
@@ -171,7 +171,7 @@ def edit_ware(id):
             form.coords.data = items.coords
             form.limit.data = items.limit
             form.fullness.data = items.fullness
-            form.description.data = items.description
+            form.description.data = items.desc
         else:
             abort(404)
         if form.validate_on_submit():
@@ -182,7 +182,7 @@ def edit_ware(id):
                 items.coords = form.coords.data
                 items.limit = form.limit.data
                 items.fullness = form.fullness.data
-                items.description = form.description.data
+                items.desc = form.description.data
                 db_sess.commit()
                 return redirect('/')
             else:
@@ -191,6 +191,18 @@ def edit_ware(id):
                                title='Редактирование склада',
                                form=form)
 
+
+@app.route('/wares_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_ware(id):
+    db_sess = db_session.create_session()
+    ware = db_sess.query(ItemModel).filter(WareModel.id == id).first()
+    if ware:
+        db_sess.delete(ware)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
 
 @app.route("/")
 def main_menu():
@@ -227,7 +239,7 @@ def items_list():
     return render_template("items_table.html", items=items)
 
 
-@app.route("/sklads_list")
+@app.route("/wares_list")
 def sklad_list():
     """
     Отображение табилцы складов
