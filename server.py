@@ -119,31 +119,32 @@ def edit_item(id):
     form = ItemForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
-        if items:
-            form.item_name.data = items.name
-            form.category.data = items.category
-            form.price.data = items.price
-            form.weight.data = items.weight
-            form.desc.data = items.description
+        item = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+        if item:
+            form.item_name.data = item.name
+            form.category.data = item.category
+            form.price.data = item.price
+            form.weight.data = item.weight
+            form.desc.data = item.description
         else:
             abort(404)
-        if form.validate_on_submit():
-            db_sess = db_session.create_session()
-            items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
-            if items:
-                items.name = form.item_name.data
-                items.category = form.category.data
-                items.price = form.price.data
-                items.weight = form.weight.data
-                items.description = form.desc.data
-                db_sess.commit()
-                return redirect('/')
-            else:
-                abort(404)
-        return render_template('new_item.html',
-                               title='Редактирование продукта',
-                               form=form)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        item = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+        if item:
+            item.name = form.item_name.data
+            item.category = form.category.data
+            item.price = form.price.data
+            item.weight = form.weight.data
+            item.description = form.desc.data
+            db_sess.merge(item)
+            db_sess.commit()
+            return redirect('/items_list')
+        else:
+            abort(404)
+    return render_template('new_item.html',
+                           title='Редактирование продукта',
+                           form=form)
 
 
 @app.route('/items_delete/<int:id>', methods=['GET', 'POST'])
@@ -174,22 +175,22 @@ def edit_ware(id):
             form.description.data = items.desc
         else:
             abort(404)
-        if form.validate_on_submit():
-            db_sess = db_session.create_session()
-            items = db_sess.query(WareModel).filter(WareModel.id == id).first()
-            if items:
-                items.name = form.wh_name.data
-                items.coords = form.coords.data
-                items.limit = form.limit.data
-                items.fullness = form.fullness.data
-                items.desc = form.description.data
-                db_sess.commit()
-                return redirect('/')
-            else:
-                abort(404)
-        return render_template('ware_edit.html',
-                               title='Редактирование склада',
-                               form=form)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        items = db_sess.query(WareModel).filter(WareModel.id == id).first()
+        if items:
+            items.name = form.wh_name.data
+            items.coords = form.coords.data
+            items.limit = form.limit.data
+            items.fullness = form.fullness.data
+            items.desc = form.description.data
+            db_sess.commit()
+            return redirect('/wares_list')
+        else:
+            abort(404)
+    return render_template('warehouses.html',
+                           title='Редактирование склада',
+                           form=form)
 
 
 @app.route('/wares_delete/<int:id>', methods=['GET', 'POST'])
@@ -202,7 +203,7 @@ def delete_ware(id):
         db_sess.commit()
     else:
         abort(404)
-    return redirect('/')
+    return redirect('/wares_list')
 
 @app.route("/")
 def main_menu():
@@ -246,9 +247,8 @@ def sklad_list():
     :return:
     """
     session = db_session.create_session()
-    items = session.query(ItemModel).all()
-    print(items)
-    return render_template("sklad_table.html", items=items)
+    warehouses = session.query(WareModel).all()
+    return render_template("sklad_table.html", warehouses=warehouses)
 
 
 @app.route('/register', methods=['GET', 'POST'])

@@ -14,6 +14,7 @@
             <td class="title" width="200px" align="center">Вместимость</td>
             <td class="title" width="200px" align="center">Заполненость</td>
             <td class="title" width="1000px" align="center">Описание</td>
+            <td class="title" width="150px" align="center">Кнопки</td>
         </tr>
         {% for warehouse in warehouses %}
         <tr class="my_row">
@@ -23,6 +24,12 @@
             <td class="ordinary" align="center">{{ warehouse.limit }}</td>
             <td class="ordinary" align="center">{{ warehouse.fullness }}</td>
             <td class="ordinary">{{ warehouse.description }}</td>
+            <td class="ordinary"><a href="/wares_list/{{ warehouse.id }}" class="btn btn-success">
+                Изменить
+            </a>
+            <a href="/wares_delete/{{ warehouse.id }}" class="btn btn-danger">
+                 Удалить  
+            </a></td>
         </tr>
         {% endfor %}
     </table>

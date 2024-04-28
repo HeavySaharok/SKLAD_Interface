@@ -14,6 +14,7 @@
             <td class="title" width="200px" align="center">Цена</td>
             <td class="title" width="200px" align="center">Вес</td>
             <td class="title" width="1000px" align="center">Описание</td>
+            <td class="title" width="150px" align="center">Кнопки</td>
         </tr>
         {% for item in items %}
         <tr class="my_row">
@@ -23,11 +24,11 @@
             <td class="ordinary" align="center">{{ item.price }} руб</td>
             <td class="ordinary" align="center">{{ item.weight }} кг</td>
             <td class="ordinary">{{ item.description }}</td>
-            <td class="ordinary"><a href="/item/{{ item.id }}" class="btn btn-success">
+            <td class="ordinary"><a href="/edit_item/{{ item.id }}" class="btn btn-success">
                 Изменить
             </a>
             <a href="/items_delete/{{ item.id }}" class="btn btn-danger">
-                  Удалить 
+                 Удалить  
             </a></td>
 
         </tr>
