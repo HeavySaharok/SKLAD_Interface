@@ -149,6 +149,18 @@ def items_list():
     return render_template("items_table.html", items=items)
 
 
+@app.route("/sklads_list")
+def sklad_list():
+    """
+    Отображение табилцы складов
+    :return:
+    """
+    session = db_session.create_session()
+    items = session.query(ItemModel).all()
+    print(items)
+    return render_template("sklad_table.html", items=items)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     """
