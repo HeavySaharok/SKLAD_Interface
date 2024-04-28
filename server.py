@@ -30,14 +30,6 @@ def load_user(user_id):
 
 def main():
     db_session.global_init("db/main_database.db")
-
-    # для списка объектов
-    api.add_resource(users_resources.UsersListResource, '/api/v2/users')
-
-    # для одного объекта
-    api.add_resource(users_resources.UsersResource, '/api/v2/users/<int:user_id>')
-
-    app.register_blueprint(jobs_api.blueprint)
     app.run(debug=True)
 
 
