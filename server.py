@@ -7,6 +7,7 @@ from data.ware_model import WareModel
 from forms.user import RegisterForm, LoginForm
 from forms.item import ItemForm
 from forms.ware import WarehouseForm
+from forms.control import ControlForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
 from db.db_processing import *
@@ -238,6 +239,18 @@ def sklad_inventory(name):
     items = table_data(name)
     print(items)
     return render_template("sklad_inventory.html", items=items)
+
+
+@app.route("/control")
+def control():
+    """
+    На этой страницы можно производить логистику между и вне складов
+    """
+    session = db_session.create_session()
+    form = ControlForm()
+    wares = session.query(WareModel).all()
+    print(wares)
+    return render_template("control.html", titel="Управление складами", form=form, wares=wares)
 
 
 @app.route('/register', methods=['GET', 'POST'])
