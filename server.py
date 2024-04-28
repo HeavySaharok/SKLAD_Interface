@@ -113,6 +113,85 @@ def add_item():
     return render_template('new_item.html', title='Создание предмета', form=form)
 
 
+@app.route('/items_list/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_item(id):
+    form = ItemForm
+    if request.method == "GET":
+        db_sess = db_session.create_session()
+        items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+        if items:
+            form.item_name.data = items.name
+            form.category.data = items.category
+            form.price.data = items.price
+            form.weight.data = items.weight
+            form.desc.data = items.desc
+        else:
+            abort(404)
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+            if items:
+                items.name = form.item_name.data
+                items.category = form.category.data
+                items.price = form.price.data
+                items.weight = form.weight.data
+                items.desc = form.desc.data
+                db_sess.commit()
+                return redirect('/')
+            else:
+                abort(404)
+        return render_template('item_edit.html',
+                               title='Редактирование продукта',
+                               form=form)
+
+
+@app.route('/items_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_item(id):
+    db_sess = db_session.create_session()
+    items = db_sess.query(ItemModel).filter(ItemModel.id == id).first()
+    if items:
+        db_sess.delete(items)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
+
+
+@app.route('/wares_list/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_ware(id):
+    form = WarehouseForm
+    if request.method == "GET":
+        db_sess = db_session.create_session()
+        items = db_sess.query(WareModel).filter(WareModel.id == id).first()
+        if items:
+            form.wh_name.data = items.name
+            form.coords.data = items.coords
+            form.limit.data = items.limit
+            form.fullness.data = items.fullness
+            form.description.data = items.description
+        else:
+            abort(404)
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            items = db_sess.query(WareModel).filter(WareModel.id == id).first()
+            if items:
+                items.name = form.wh_name.data
+                items.coords = form.coords.data
+                items.limit = form.limit.data
+                items.fullness = form.fullness.data
+                items.description = form.description.data
+                db_sess.commit()
+                return redirect('/')
+            else:
+                abort(404)
+        return render_template('ware_edit.html',
+                               title='Редактирование склада',
+                               form=form)
+
+
 @app.route("/")
 def main_menu():
     """
@@ -145,7 +224,6 @@ def items_list():
     """
     session = db_session.create_session()
     items = session.query(ItemModel).all()
-    print(items)
     return render_template("items_table.html", items=items)
 
 
