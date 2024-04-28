@@ -11,6 +11,7 @@ from forms.item import ItemForm
 from forms.ware import WarehouseForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
+from db_processing import create_table
 
 app = Flask(__name__)
 api = Api(app) # создадим объект RESTful-API
@@ -79,6 +80,7 @@ def add_ware():
         db_sess = db_session.create_session()
         ware = WareModel()
         ware.name = form.wh_name.data
+        create_table(ware.name)
         ware.coords = form.coords.data
         ware.limit = form.limit.data
         ware.fullness = form.fullness.data
