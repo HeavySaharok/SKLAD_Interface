@@ -268,8 +268,11 @@ def control():
     """
     На этой страницы можно производить логистику между и вне складов
     """
+    session = db_session.create_session()
     form = ControlForm()
-    return render_template("control.html", titel="Управление складами", form=form)
+    wares = session.query(WareModel).all()
+    print(wares)
+    return render_template("control.html", titel="Управление складами", form=form, wares=wares)
 
 
 @app.route('/register', methods=['GET', 'POST'])
