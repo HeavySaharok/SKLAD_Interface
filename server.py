@@ -145,20 +145,18 @@ def items_list():
     """
     session = db_session.create_session()
     items = session.query(ItemModel).all()
-    print(items)
     return render_template("items_table.html", items=items)
 
 
-@app.route("/sklads_list")
+@app.route("/wares_list")
 def sklad_list():
     """
     Отображение табилцы складов
     :return:
     """
     session = db_session.create_session()
-    items = session.query(ItemModel).all()
-    print(items)
-    return render_template("sklad_table.html", items=items)
+    warehouses = session.query(WareModel).all()
+    return render_template("sklad_table.html", warehouses=warehouses)
 
 
 @app.route('/register', methods=['GET', 'POST'])
