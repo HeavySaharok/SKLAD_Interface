@@ -4,12 +4,12 @@ from flask_restful import reqparse, abort, Api, Resource
 
 from data.item_model import ItemModel
 from data.ware_model import WareModel
-from data.inventory_model import InvModel
 from data.jobs import Jobs
 from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
 from forms.item import ItemForm
 from forms.ware import WarehouseForm
+from forms.control import ControlForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
 from db_processing import *
@@ -245,7 +245,7 @@ def items_list():
 @app.route("/wares_list")
 def sklad_list():
     """
-    Отображение табилцы складов
+    Отображение таблицы складов
     :return:
     """
     session = db_session.create_session()
@@ -261,6 +261,15 @@ def sklad_inventory(name):
     items = table_data(name)
     print(items)
     return render_template("sklad_inventory.html", items=items)
+
+
+@app.route("/control")
+def control():
+    """
+    На этой страницы можно производить логистику между и вне складов
+    """
+    form = ControlForm()
+    return render_template("control.html", titel="Управление складами", form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
