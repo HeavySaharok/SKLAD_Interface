@@ -103,7 +103,6 @@ def add_item():
         item.weight = form.weight.data
         db_sess.merge(item)
         db_sess.commit()
-        print(item.id, item.name, item.category, item.price, item.weight)
         return redirect('/')
     return render_template('new_item.html', title='Создание предмета', form=form)
 
