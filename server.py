@@ -106,6 +106,7 @@ def add_item():
         item.category = form.category.data
         item.price = form.price.data
         item.weight = form.weight.data
+        item.description = form.desc.data
         db_sess.merge(item)
         db_sess.commit()
         return redirect('/')

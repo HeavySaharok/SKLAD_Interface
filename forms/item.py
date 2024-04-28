@@ -8,4 +8,5 @@ class ItemForm(FlaskForm):
     category = TextAreaField("Категория")
     price = IntegerField("Цена")
     weight = IntegerField("Вес")
+    desc = TextAreaField("Описание (опционально)")
     submit = SubmitField('Создать предмет')
