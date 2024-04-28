@@ -3,25 +3,39 @@
 {% block content %}
 <meta charset="UTF-8">
 <h2 align="center" class="text-light">Список складируемых предметов</h2>
-{% for item in items %}
-<h3 class="text-light">Продукт # {{ item.id }}</h3>
 <div class="table_container">
     <table class="my_table">
-        <tr class="my_row">
-            <td class="title" width="200px" bgcolor="#BCBDC2">Название</td>
-            <td class="title" width="200px" bgcolor="#BCBDC2">Категория</td>
-            <td class="title" width="200px" bgcolor="#BCBDC2" align="center">Цена</td>
-            <td class="title" width="200px" bgcolor="#BCBDC2" align="center">Вес</td>
+        <tr class="my_row" bgcolor="#AEB3B6">
+            <td class="title" width="50px">ID</td>
+            <td class="title" width="200px">Название</td>
+            <td class="title" width="200px">Категория</td>
+            <td class="title" width="200px" align="center">Цена</td>
+            <td class="title" width="200px" align="center">Вес</td>
+            <td class="title" width="1000px" align="center">Описание</td>
         </tr>
-        <tr class="my_row">
-            <td class="ordinary" bgcolor="#E1E2E5">{{ item.name}}</td>
-            <td class="ordinary" bgcolor="#E1E2E5">{{ item.category}}</td>
-            <td class="ordinary" bgcolor="#E1E2E5" align="center">{{ item.price }} руб</td>
-            <td class="ordinary" bgcolor="#E1E2E5" align="center">{{ item.weight }} кг</td>
+        {% for item in items %}
+        {% if item.id % 2 == 0 %}
+        <tr class="my_row" bgcolor="#E1E2E5" >
+            <td class="ordinary">{{ item.id }}</td>
+            <td class="ordinary">{{ item.name }}</td>
+            <td class="ordinary" >{{ item.category }}</td>
+            <td class="ordinary" align="center">{{ item.price }} руб</td>
+            <td class="ordinary" align="center">{{ item.weight }} кг</td>
+            <td class="ordinary">SUCK MY DICK</td>
         </tr>
+        {% else %}
+        <tr class="my_row" bgcolor="#FCFBFD">
+            <td class="ordinary">{{ item.id }}</td>
+            <td class="ordinary">{{ item.name }}</td>
+            <td class="ordinary">{{ item.category }}</td>
+            <td class="ordinary" align="center">{{ item.price }} руб</td>
+            <td class="ordinary" align="center">{{ item.weight }} кг</td>
+            <td class="ordinary">ТУТ ДОЛЖНО БЫТЬ ОПИСАНИЕ</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
     </table>
 </div>
 <br>
-{% endfor %}
 
 {% endblock %}
