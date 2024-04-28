@@ -137,6 +137,18 @@ def index():
     return render_template("index.html", jobs=jobs, names=names)
 
 
+@app.route("/items_list")
+def items_list():
+    """
+    Отображение табилцы предметов
+    :return:
+    """
+    session = db_session.create_session()
+    items = session.query(ItemModel).all()
+    print(items)
+    return render_template("items_table.html", items=items)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     """
