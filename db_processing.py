@@ -1,10 +1,15 @@
 import sqlite3
 
 
-con = sqlite3.connect("main_storage.db")
-cur = con.cursor()
-result = cur.execute("""SELECT * FROM products
-            WHERE type = 1""").fetchall()
-for elem in result:
-    print(elem)
-con.close()
+def create_table(name):
+    """
+    Создаёт таблицу склада в БД
+    """
+    con = sqlite3.connect("db/main_database.db")
+    cur = con.cursor()
+    cur.execute(f"""CREATE TABLE {name} (
+        id TEXT NOT NULL UNIQUE,
+        amount INTEGER NOT NULL,
+        PRIMARY KEY (id))""").fetchall()
+    con.commit()
+    con.close()

@@ -41,6 +41,15 @@
                 </p>
             {% endfor %}
         </p>
+         <p>
+            {{ form.desc.label }}<br>
+            {{ form.desc(class="form-control") }}<br>
+            {% for error in form.desc.errors %}
+                <p content="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
         <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         {{ message }}
     </form>

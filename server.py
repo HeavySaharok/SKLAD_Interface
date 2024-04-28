@@ -3,13 +3,15 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from flask_restful import reqparse, abort, Api, Resource
 
 from data.item_model import ItemModel
+from data.ware_model import WareModel
 from data.jobs import Jobs
 from forms.jobs import JobsForm
 from forms.user import RegisterForm, LoginForm
 from forms.item import ItemForm
-from forms.warehouse import WarehouseForm
+from forms.ware import WarehouseForm
 from data.users import User
 from data import db_session, jobs_api, users_resources
+from db_processing import create_table
 
 app = Flask(__name__)
 api = Api(app) # создадим объект RESTful-API
@@ -68,22 +70,25 @@ def add_jobs():
 
 @app.route('/new_warehouse', methods=['GET', 'POST'])
 @login_required
-def add_skald():
-    """Создаёт склад в бд и отдельную таблицу склада"""
+def add_ware():
+    """
+    Добавляет строку склада в таблицу складов
+    :return:
+    """
     form = WarehouseForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        jobs = Jobs()
-        jobs.job = form.job.data
-        jobs.team_leader = form.team_leader.data
-        jobs.work_size = form.work_size.data
-        jobs.collaborators = form.collaborators.data
-        jobs.is_finished = form.is_finished.data
-        current_user.jobs.append(jobs)
-        db_sess.merge(current_user)
+        ware = WareModel()
+        ware.name = form.wh_name.data
+        create_table(ware.name)
+        ware.coords = form.coords.data
+        ware.limit = form.limit.data
+        ware.fullness = form.fullness.data
+        ware.desc = form.description.data
+        db_sess.merge(ware)
         db_sess.commit()
         return redirect('/')
-    return render_template('create_sklad.html', title='Добавление склада', form=form)
+    return render_template('warehouses.html', title='Создание склада', form=form)
 
 
 @app.route('/new_item', methods=['GET', 'POST'])
@@ -101,6 +106,7 @@ def add_item():
         item.category = form.category.data
         item.price = form.price.data
         item.weight = form.weight.data
+        item.description = form.desc.data
         db_sess.merge(item)
         db_sess.commit()
         return redirect('/')
