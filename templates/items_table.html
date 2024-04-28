@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+<p><br></p>
+<div class="border rounded">
 <meta charset="UTF-8">
 <h2 align="center" class="text-light">Список складируемых предметов</h2>
 <div class="table_container">
-    <table class="my_table">
-        <tr class="my_row" bgcolor="#AEB3B6">
+    <table class="table table-striped text-light">
+        <tr class="my_row">
             <td class="title" width="50px">ID</td>
             <td class="title" width="200px">Название</td>
             <td class="title" width="200px">Категория</td>
@@ -14,27 +16,17 @@
             <td class="title" width="1000px" align="center">Описание</td>
         </tr>
         {% for item in items %}
-        {% if item.id % 2 == 0 %}
-        <tr class="my_row" bgcolor="#E1E2E5" >
-            <td class="ordinary">{{ item.id }}</td>
-            <td class="ordinary">{{ item.name }}</td>
-            <td class="ordinary" >{{ item.category }}</td>
-            <td class="ordinary" align="center">{{ item.price }} руб</td>
-            <td class="ordinary" align="center">{{ item.weight }} кг</td>
-            <td class="ordinary">SUCK MY DICK</td>
-        </tr>
-        {% else %}
-        <tr class="my_row" bgcolor="#FCFBFD">
+        <tr class="my_row">
             <td class="ordinary">{{ item.id }}</td>
             <td class="ordinary">{{ item.name }}</td>
             <td class="ordinary">{{ item.category }}</td>
             <td class="ordinary" align="center">{{ item.price }} руб</td>
             <td class="ordinary" align="center">{{ item.weight }} кг</td>
-            <td class="ordinary">ТУТ ДОЛЖНО БЫТЬ ОПИСАНИЕ</td>
+            <td class="ordinary">{{ item.description }}</td>
         </tr>
-        {% endif %}
         {% endfor %}
     </table>
+</div>
 </div>
 <br>
 
