@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from flask_restful import abort, Api
 
 from data.item_model import ItemModel
+from data.operations_model import OperationModel
 from data.ware_model import WareModel
 from forms.user import RegisterForm, LoginForm
 from forms.item import ItemForm
@@ -30,14 +31,6 @@ def load_user(user_id):
 
 def main():
     db_session.global_init("db/main_database.db")
-
-    # для списка объектов
-    api.add_resource(users_resources.UsersListResource, '/api/v2/users')
-
-    # для одного объекта
-    api.add_resource(users_resources.UsersResource, '/api/v2/users/<int:user_id>')
-
-    app.register_blueprint(jobs_api.blueprint)
     app.run(debug=True)
 
 
@@ -208,7 +201,9 @@ def main_menu():
     """
     # with open('README.md', mode='r', encoding='utf-8') as readme:
     #     text = readme.readlines()
-    return render_template("main.html")
+    db_sess = db_session.create_session()
+    opers = db_sess.query(OperationModel).all()[:10]
+    return render_template("main.html", title='Последние 10 операций', opers=opers)
 
 
 @app.route("/items_list")
@@ -241,7 +236,7 @@ def sklad_inventory(name):
     return render_template("sklad_inventory.html", items=items)
 
 
-@app.route("/control")
+@app.route("/control", methods=['GET', 'POST'])
 def control():
     """
     На этой страницы можно производить логистику между и вне складов
@@ -249,8 +244,21 @@ def control():
     session = db_session.create_session()
     form = ControlForm()
     wares = session.query(WareModel).all()
+    print(form.output.data, form.input.data, form.id_item.data, form.count.data)
+    if form.validate_on_submit():
+        table_edit(form.output.data, form.id_item.data, form.count.data, 'output')
+        table_edit(form.input.data, form.id_item.data, form.count.data)
+        operation = OperationModel()
+        operation.product_id = form.id_item.data
+        operation.prod_amount = form.count.data
+        operation.send = form.output.data
+        operation.receive = form.input.data
+        operation.res_price = 0
+        session.merge(operation)
+        session.commit()
+        return redirect('/')
     print(wares)
-    return render_template("control.html", titel="Управление складами", form=form, wares=wares)
+    return render_template("control.html", title="Управление складами", form=form, wares=wares)
 
 
 @app.route('/register', methods=['GET', 'POST'])
