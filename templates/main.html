@@ -1,5 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="text-light">Привет, {{ username }}!</h1>
+<p><br></p>
+<div class="border rounded">
+<meta charset="UTF-8">
+<h2 align="center" class="text-light">{{ title }}</h2>
+<div class="table_container">
+    <table class="table table-striped text-light">
+        <tr class="my_row">
+            <td class="title" width="50px">ID</td>
+            <td class="title" width="200px">ID Продукта</td>
+            <td class="title" width="200px">Количество</td>
+            <td class="title" width="200px">Стоимость товаров</td>
+            <td class="title" width="200px">Отправитель</td>
+            <td class="title" width="200px">Получатель</td>
+        </tr>
+        {% for oper in opers %}
+        <tr class="my_row">
+            <td class="ordinary">{{ oper.id }}</td>
+            <td class="ordinary">{{ oper.product_id }}</td>
+            <td class="ordinary">{{ oper.prod_amount }}</td>
+            <td class="ordinary">{{ oper.res_price }}</td>
+            <td class="ordinary">{{ oper.send }}</td>
+            <td class="ordinary">{{ oper.receive }}</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</div>
+<br>
+
 {% endblock %}

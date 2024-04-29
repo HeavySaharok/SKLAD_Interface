@@ -201,7 +201,9 @@ def main_menu():
     """
     # with open('README.md', mode='r', encoding='utf-8') as readme:
     #     text = readme.readlines()
-    return render_template("main.html")
+    db_sess = db_session.create_session()
+    opers = db_sess.query(OperationModel).all()[:10]
+    return render_template("main.html", title='Последние 10 операций', opers=opers)
 
 
 @app.route("/items_list")
