@@ -243,11 +243,12 @@ def control():
     form = ControlForm()
     wares = session.query(WareModel).all()
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
+        table_edit(form.output, form.id_item, form.count, 'output')
+        table_edit(form.input, form.id_item, form.count)
         operation = OperationModel()
         return redirect('/')
     print(wares)
-    return render_template("control.html", titel="Управление складами", form=form, wares=wares)
+    return render_template("control.html", title="Управление складами", form=form, wares=wares)
 
 
 @app.route('/register', methods=['GET', 'POST'])

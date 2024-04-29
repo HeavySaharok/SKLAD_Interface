@@ -46,7 +46,18 @@ def table_edit(name, id, amount, oper='input'):
         if name != 'outside':
             cur.execute(f"""UPDATE {name} set amount = amount - {amount} where id = {id}""")
             con.commit()
-    if oper == 'input':
-        if name != 'outside':
-            cur.execute(f"""UPDATE {name} set amount = amount + {amount} where id = {id}""")
+            cur.execute(f"""DELETE from {name} where amount = 0""")
             con.commit()
+            con.close()
+    if oper == 'input':
+        flag = cur.execute(f"""SELECT * from {name} where id = {id}""").fetchall()
+        if flag:
+            if name != 'outside':
+                cur.execute(f"""UPDATE {name} set amount = amount + {amount} where id = {id}""")
+                con.commit()
+                con.close()
+        else:
+            if name != 'outside':
+                cur.execute(f"""INSERT into {name} (id, amount) VALUES ({id}, {amount})""")
+                con.commit()
+                con.close()
