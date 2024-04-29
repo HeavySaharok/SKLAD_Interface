@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+<div class="container text-center text-light">
+    <h1>{{ title }}</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+            <div class="row justify-content-around">
+                <div class="col-4">
+                    {{ form.output.label }}<br>
+                    {{ form.output(class="form-select", list="datalistOptions") }}<br>
+                    <datalist class="form-select" aria-label="Large select example" id="datalistOptions">
+                      <option selected>Выберите из списка</option>
+                      <option value="outside">
+                        {% for ware in wares %}
+                          <option value="{{ ware.name }}">
+                        {% endfor %}
+                    </datalist>
+                    {% for error in form.output.errors %}
+                        <p content="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                    <p>
+                        {{ form.id_item.label }}<br>
+                        {{ form.id_item(class="form-control") }}<br>
+                        {% for error in form.id_item.errors %}
+                            <p content="alert alert-danger" role="alert">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </p>
+                </div>
+                <div class="col-4">
+                    {{ form.input.label }}<br>
+                    {{ form.input(class="form-select", list="datalistOptions1") }}<br>
+                    <datalist class="form-select" aria-label="Large select example" id="datalistOptions1">
+                      <option selected>Выберите из списка</option>
+                      <option value="outside">
+                        {% for ware in wares %}
+                          <option value="{{ ware.name }}">
+                        {% endfor %}
+                    </datalist>
+                    {% for error in form.input.errors %}
+                        <p content="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                    <p>
+                        {{ form.count.label }}<br>
+                        {{ form.count(class="form-control") }}<br>
+                        {% for error in form.count.errors %}
+                            <p content="alert alert-danger" role="alert">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </p>
+                </div>
+              </div>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        {{ message }}
+    </form>
+</div>
+{% endblock %}

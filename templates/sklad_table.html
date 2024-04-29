@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p><br></p>
+<div class="border rounded">
+<meta charset="UTF-8">
+<h2 align="center" class="text-light">Список складов</h2>
+<div class="table_container">
+    <table class="table table-striped text-light">
+        <tr class="my_row">
+            <td class="title" width="50px">ID</td>
+            <td class="title" width="200px">Название</td>
+            <td class="title" width="200px">Координаты</td>
+            <td class="title" width="200px" align="center">Вместимость</td>
+            <td class="title" width="200px" align="center">Заполненость</td>
+            <td class="title" width="1000px" align="center">Описание</td>
+            <td class="title" width="150px" align="center">Кнопки</td>
+        </tr>
+        {% for warehouse in warehouses %}
+        <tr class="my_row">
+            <td class="ordinary">{{ warehouse.id }}</td>
+            <td class="ordinary">{{ warehouse.name }}</td>
+            <td class="ordinary">{{ warehouse.coords }}</td>
+            <td class="ordinary" align="center">{{ warehouse.limit }}</td>
+            <td class="ordinary" align="center">{{ warehouse.fullness }}</td>
+            <td class="ordinary">{{ warehouse.description }}</td>
+            <td class="ordinary"><a href="/wares_inventory/{{ warehouse.name }}" class="btn btn-secondary">
+                 Товары  
+            </a>
+            <a href="/wares_list/{{ warehouse.id }}" class="btn btn-success">
+                 Изменить  
+            </a>
+            <a href="/wares_delete/{{ warehouse.id }}" class="btn btn-danger">
+                 Удалить  
+            </a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</div>
+<br>
+
+{% endblock %}

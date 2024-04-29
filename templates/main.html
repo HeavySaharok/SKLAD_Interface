@@ -1,16 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
+<p><br></p>
+<div class="border rounded">
 <meta charset="UTF-8">
-    <h2 align="left">Основная страница</h2>
-<h3>Readme:</h3>
-{% for line in text %}
+<h2 align="center" class="text-light">{{ title }}</h2>
 <div class="table_container">
-    <table class="my_table">
-        <p>{{ line }}</p>
+    <table class="table table-striped text-light">
+        <tr class="my_row">
+            <td class="title" width="50px">ID</td>
+            <td class="title" width="200px">ID Продукта</td>
+            <td class="title" width="200px">Количество</td>
+            <td class="title" width="200px">Стоимость товаров</td>
+            <td class="title" width="200px">Отправитель</td>
+            <td class="title" width="200px">Получатель</td>
+        </tr>
+        {% for oper in opers %}
+        <tr class="my_row">
+            <td class="ordinary">{{ oper.id }}</td>
+            <td class="ordinary">{{ oper.product_id }}</td>
+            <td class="ordinary">{{ oper.prod_amount }}</td>
+            <td class="ordinary">{{ oper.res_price }}</td>
+            <td class="ordinary">{{ oper.send }}</td>
+            <td class="ordinary">{{ oper.receive }}</td>
+
+        </tr>
+        {% endfor %}
     </table>
 </div>
+</div>
 <br>
-{% endfor %}
 
+<div class="text-center">
+        <br>
+        <br>
+      <img src="https://lh5.googleusercontent.com/proxy/ZJ55agNpLd6jSvsBiPYQbFSWaijwHpDJACJzZL44jgfVGf1h9B-WMWCNgsTdD9QdEzZxnibyrVXgX1M6HoaW4TOrt21nyRMWQfrghbqNvn4Y9Pdr3iXyjBrF1K7-8sx9idlct6g" class="img-thumbnail" alt="увы">
+</div>
 {% endblock %}
