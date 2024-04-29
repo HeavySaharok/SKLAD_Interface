@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from flask_restful import abort, Api
 
 from data.item_model import ItemModel
+from data.operations_model import OperationModel
 from data.ware_model import WareModel
 from forms.user import RegisterForm, LoginForm
 from forms.item import ItemForm
@@ -241,6 +242,10 @@ def control():
     session = db_session.create_session()
     form = ControlForm()
     wares = session.query(WareModel).all()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        operation = OperationModel()
+        return redirect('/')
     print(wares)
     return render_template("control.html", titel="Управление складами", form=form, wares=wares)
 
