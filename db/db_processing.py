@@ -34,3 +34,19 @@ def table_data(name):
     cur = con.cursor()
     cur.execute(f"""SELECT * from {name}""")
     return cur.fetchall()
+
+
+def table_edit(name, id, amount, oper='input'):
+    """
+    Редактирует выбранный предмет из выбранной таблицы
+    """
+    con = sqlite3.connect("db/main_database.db")
+    cur = con.cursor()
+    if oper == 'output':
+        if name != 'outside':
+            cur.execute(f"""UPDATE {name} set amount = amount - {amount} where id = {id}""")
+            con.commit()
+    if oper == 'input':
+        if name != 'outside':
+            cur.execute(f"""UPDATE {name} set amount = amount + {amount} where id = {id}""")
+            con.commit()
