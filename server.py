@@ -236,7 +236,7 @@ def sklad_inventory(name):
     return render_template("sklad_inventory.html", items=items)
 
 
-@app.route("/control")
+@app.route("/control", methods=['GET', 'POST'])
 def control():
     """
     На этой страницы можно производить логистику между и вне складов
@@ -244,10 +244,18 @@ def control():
     session = db_session.create_session()
     form = ControlForm()
     wares = session.query(WareModel).all()
+    print(form.output.data, form.input.data, form.id_item.data, form.count.data)
     if form.validate_on_submit():
-        table_edit(form.output, form.id_item, form.count, 'output')
-        table_edit(form.input, form.id_item, form.count)
+        table_edit(form.output.data, form.id_item.data, form.count.data, 'output')
+        table_edit(form.input.data, form.id_item.data, form.count.data)
         operation = OperationModel()
+        operation.product_id = form.id_item.data
+        operation.prod_amount = form.count.data
+        operation.send = form.output.data
+        operation.receive = form.input.data
+        operation.res_price = 0
+        session.merge(operation)
+        session.commit()
         return redirect('/')
     print(wares)
     return render_template("control.html", title="Управление складами", form=form, wares=wares)

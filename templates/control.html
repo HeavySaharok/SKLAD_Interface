@@ -9,13 +9,14 @@
             <div class="row justify-content-around">
                 <div class="col-4">
                     {{ form.output.label }}<br>
-                    <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+                    {{ form.output(class="form-select", list="datalistOptions") }}<br>
+                    <datalist class="form-select" aria-label="Large select example" id="datalistOptions">
                       <option selected>Выберите из списка</option>
-                      <option value="0">Вне системы складов</option>
+                      <option value="outside">
                         {% for ware in wares %}
-                          <option value="{{ ware.id }}">{{ ware.name }}</option>
+                          <option value="{{ ware.name }}">
                         {% endfor %}
-                    </select><br>
+                    </datalist>
                     {% for error in form.output.errors %}
                         <p content="alert alert-danger" role="alert">
                             {{ error }}
@@ -33,13 +34,14 @@
                 </div>
                 <div class="col-4">
                     {{ form.input.label }}<br>
-                    <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+                    {{ form.input(class="form-select", list="datalistOptions1") }}<br>
+                    <datalist class="form-select" aria-label="Large select example" id="datalistOptions1">
                       <option selected>Выберите из списка</option>
-                      <option value="0">Вне системы складов</option>
-                      {% for ware in wares %}
-                          <option value="{{ ware.id }}">{{ ware.name }}</option>
-                      {% endfor %}
-                    </select><br>
+                      <option value="outside">
+                        {% for ware in wares %}
+                          <option value="{{ ware.name }}">
+                        {% endfor %}
+                    </datalist>
                     {% for error in form.input.errors %}
                         <p content="alert alert-danger" role="alert">
                             {{ error }}
